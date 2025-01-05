@@ -1,0 +1,6 @@
+framework module Pods_save_couple_content_ios {
+  umbrella header "Pods-save_couple_content_ios-umbrella.h"
+
+  export *
+  module * { export * }
+}

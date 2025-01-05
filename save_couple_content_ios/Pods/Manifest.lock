@@ -1,0 +1,16 @@
+PODS:
+  - couple_shared (1.0)
+
+DEPENDENCIES:
+  - couple_shared (from `../couple_shared`)
+
+EXTERNAL SOURCES:
+  couple_shared:
+    :path: "../couple_shared"
+
+SPEC CHECKSUMS:
+  couple_shared: 9db059a025bb5845c2d6c0df2aab8355a72dcafc
+
+PODFILE CHECKSUM: 2c014acceb19a7a8d50b93e7b281160966afcd9b
+
+COCOAPODS: 1.16.2

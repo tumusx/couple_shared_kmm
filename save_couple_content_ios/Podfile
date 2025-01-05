@@ -1,0 +1,5 @@
+target 'save_couple_content_ios' do
+  use_frameworks!
+  platform :ios, '16.0'
+  pod 'couple_shared', :path => '../couple_shared'
+end
