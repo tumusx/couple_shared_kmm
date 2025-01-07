@@ -18,3 +18,4 @@ rootProject.name = "SaveListApps"
 include(":save_couple_content_android")
 include(":couple_shared")
 include(":core:network")
+include(":core:dependency_manager")
