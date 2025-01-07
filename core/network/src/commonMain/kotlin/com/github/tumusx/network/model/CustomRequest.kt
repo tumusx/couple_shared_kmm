@@ -1,13 +1,14 @@
 package com.github.tumusx.network.model
 
 import io.ktor.http.HttpMethod
+import kotlinx.serialization.KSerializer
 
 data class CustomRequest<T>(
     val url: String,
     val method: Method,
     val headers: HashMap<String, String>,
     val body: Any,
-    val resultType: T
+    val resultType: KSerializer<T>
 )
 
 
