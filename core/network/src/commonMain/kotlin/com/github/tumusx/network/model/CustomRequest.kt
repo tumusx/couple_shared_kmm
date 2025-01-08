@@ -6,8 +6,8 @@ import kotlinx.serialization.KSerializer
 data class CustomRequest<T>(
     val url: String,
     val method: Method,
-    val headers: HashMap<String, String>,
-    val body: Any,
+    val headers: HashMap<String, String> = hashMapOf(),
+    val body: Any? = null,
     val resultType: KSerializer<T>
 )
 

@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
+    alias(libs.plugins.kotlin.json)
     alias(libs.plugins.android.kotlin.multiplatform.library)
 }
 
@@ -60,6 +61,8 @@ kotlin {
             dependencies {
                 implementation(libs.kotlin.stdlib)
                 implementation (libs.kotlinx.serialization.json)
+                implementation(libs.ktor.client.content.negotiation)
+                implementation(libs.ktor.serialization.kotlinx.json)
                 implementation(libs.ktor.client.core)
             }
         }

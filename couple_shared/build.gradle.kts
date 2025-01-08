@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.kotlinCocoapods)
     alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.kotlin.json)
 }
 
 kotlin {
@@ -35,6 +36,9 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             //put your multiplatform dependencies here
+            implementation(project(":core:network"))
+            implementation(project(":core:dependency_manager"))
+            implementation(libs.kotlinx.serialization.json)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
