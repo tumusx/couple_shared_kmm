@@ -8,23 +8,25 @@ import com.github.tumusx.savelistapps.network.model.Cats
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.serializer
 
+expect fun requester(): IRequester
 
-internal class Requester(private val sharedRequestHTTP: CoupleSharedRequestHTTP) : IRequester {
+class Requester(private val sharedRequestHttp: CoupleSharedRequestHTTP) :
+    IRequester {
 
     override suspend fun onGetSeries(): String {
 
         //TODO: remove url before doing the api test
 
         val customRequest = CustomRequest(
-            url = "https://api.thecatapi.com/v1/images/search?limit=10",
+            url = "http://api.thecatapi.com/v1/images/search?limit=10",
             method = Method.Get,
             body = null,
             resultType = ListSerializer(serializer<Cats>())
         )
 
-        sharedRequestHTTP.onCustomRequest(customRequest)
+        sharedRequestHttp.onCustomRequest(customRequest)
 
-        //TODO: remove mock return after completing the api test
+        //TODO: remove mock after completing the api test
         return ""
     }
 

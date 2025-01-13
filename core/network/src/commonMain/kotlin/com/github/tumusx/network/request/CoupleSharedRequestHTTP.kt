@@ -9,6 +9,8 @@ import io.ktor.client.request.request
 import io.ktor.client.request.setBody
 import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.bodyAsText
+import io.ktor.http.ContentType
+import io.ktor.http.contentType
 import io.ktor.http.isSuccess
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,6 +26,9 @@ interface CoupleSharedRequestHTTP {
 }
 
 class CoupleSharedRequestHttpImpl(client: CoupleSharedClient) : CoupleSharedRequestHTTP {
+    companion object {
+        const val NAME = "CoupleSharedRequestHttpImpl"
+    }
 
     private val client = client.client
 
@@ -37,7 +42,7 @@ class CoupleSharedRequestHttpImpl(client: CoupleSharedClient) : CoupleSharedRequ
         httpRequestBuilder.url { request.url }
         httpRequestBuilder.setBody(request.body)
         httpRequestBuilder.headers { request.headers }
-
+        httpRequestBuilder.contentType(ContentType.Application.Json)
         val resultType = request.resultType
 
         val result = client.request(httpRequestBuilder)
