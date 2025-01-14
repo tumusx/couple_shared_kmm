@@ -40,6 +40,7 @@ kotlin {
             implementation(project(":core:dependency_manager"))
             implementation(libs.kotlinx.serialization.json)
         }
+
         commonTest.dependencies {
             implementation(libs.kotlin.test)
         }

@@ -7,11 +7,13 @@ import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.headers
 import io.ktor.client.request.request
 import io.ktor.client.request.setBody
+import io.ktor.client.request.url
 import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import io.ktor.http.isSuccess
+import io.ktor.util.logging.Logger
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -39,25 +41,39 @@ class CoupleSharedRequestHttpImpl(client: CoupleSharedClient) : CoupleSharedRequ
     override suspend fun <T> onCustomRequest(request: CustomRequest<T>) {
 
         val httpRequestBuilder = HttpRequestBuilder()
-        httpRequestBuilder.url { request.url }
+        httpRequestBuilder.url(request.url)
         httpRequestBuilder.setBody(request.body)
         httpRequestBuilder.headers { request.headers }
-        httpRequestBuilder.contentType(ContentType.Application.Json)
+        httpRequestBuilder.contentType(ContentType.parse("application/json"))
         val resultType = request.resultType
 
-        val result = client.request(httpRequestBuilder)
-        val content = contentProcess(result, resultType)
-        _resultRequest.value = content
+        val result = executeHttpRequest({
+            client.request(httpRequestBuilder)
+        }, resultType)
+        _resultRequest.value = result
     }
 
-    private fun <T> String.decodeJson(serializer: KSerializer<T>): T? {
+    private fun <T> String.decodeJson(serializer: KSerializer<T>?): T? {
         val json = Json { ignoreUnknownKeys = true }
-        return json.decodeFromString(serializer, this)
+        return serializer?.let { json.decodeFromString(it, this) }
+    }
+
+    private suspend fun <T : Any?> executeHttpRequest(
+        request: suspend () -> HttpResponse,
+        serializer: KSerializer<T>? = null,
+    ): ApiResult {
+        return try {
+            val response = request()
+            contentProcess(response, serializer)
+        } catch (exception: Exception) {
+            exception.printStackTrace()
+            ApiResult.UnknownError
+        }
     }
 
     private suspend fun <T> contentProcess(
         response: HttpResponse,
-        serializer: KSerializer<T>
+        serializer: KSerializer<T>?
     ): ApiResult {
         val result = response.status.isSuccess()
         return if (result) {
